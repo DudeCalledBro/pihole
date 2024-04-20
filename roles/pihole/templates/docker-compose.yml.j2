@@ -5,6 +5,7 @@ version: "3"
 services:
   pihole:
     image: "{{ pihole_docker_image }}"
+    hostname: "{{ pihole_docker_hostname }}"
     container_name: pihole
     restart: unless-stopped
     env_file:
