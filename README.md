@@ -35,7 +35,7 @@ This repository contains my ansible deployment for Pi-hole. I am using Pi-hole o
 
 3. There you either want to backup your data or restore it from an existing TAR file
 
-> **Notice!** The Pi-hole ansible role creates an cronjob that backups all required data. You may want to mount the backup directory `{{ pihole_docker_path }}/backup` on to a NAS or dedicated hard drive.
+> **Notice!** The Pi-hole ansible role creates an cronjob that backups all required data. You may want to mount the backup directory `{{ pihole_docker_path }}/backups` on to a NAS or dedicated hard drive.
 
 ## Further
 
