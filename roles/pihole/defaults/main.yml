@@ -9,4 +9,4 @@ pihole_docker_image: "pihole/pihole:latest"
 pihole_docker_environment: ""
 
 # pi-hole docker hostname
-pihole_docker_hostname: "{{ inventory_hostname }}"
+pihole_docker_hostname: pihole
