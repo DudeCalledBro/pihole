@@ -1,0 +1,12 @@
+- hosts: all
+  roles:
+  - role: pihole
+
+  post_tasks:
+  - name: Ensure Pi-hole http is reachable (port 80)
+    ansible.builtin.wait_for:
+      port: 80
+
+  - name: Ensure Pi-hole dns is reachable (port 53)
+    ansible.builtin.wait_for:
+      port: 53

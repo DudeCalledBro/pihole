@@ -1,0 +1,9 @@
+pihole_docker_path: /opt/pihole
+pihole_docker_file_owner: root
+pihole_docker_file_group: root
+
+# pi-hole docker image
+pihole_docker_image: "pihole/pihole:latest"
+
+# pi-hole docker environment
+pihole_docker_environment: ""

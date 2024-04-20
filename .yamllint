@@ -1,0 +1,16 @@
+extends: default
+
+rules:
+  document-start:
+    present: false
+  indentation:
+    spaces: 2
+    indent-sequences: consistent
+    check-multi-line-strings: true
+  line-length:
+    max: 200
+    level: warning
+
+# Ignore CI
+ignore: |
+  .github/*

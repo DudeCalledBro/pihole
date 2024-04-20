@@ -1,0 +1,57 @@
+- name: Create Pi-hole Directory
+  ansible.builtin.file:
+    path: "{{ pihole_docker_path }}"
+    owner: "{{ pihole_docker_file_owner }}"
+    group: "{{ pihole_docker_file_group }}"
+    state: directory
+    mode: 0755
+
+- name: Create Pi-hole Environment File
+  when:
+  - pihole_docker_environment is defined
+  - pihole_docker_environment | length
+  ansible.builtin.copy:
+    dest: "{{ pihole_docker_path }}/pihole.env"
+    content: "{{ pihole_docker_environment }}"
+    owner: "{{ pihole_docker_file_owner }}"
+    group: "{{ pihole_docker_file_group }}"
+    mode: 0644
+  notify: restart pihole
+
+- name: Create Pi-hole Docker Compose File
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ pihole_docker_path }}/docker-compose.yml"
+    owner: "{{ pihole_docker_file_owner }}"
+    group: "{{ pihole_docker_file_group }}"
+    trim_blocks: false
+    mode: 0644
+  notify: restart pihole
+
+- name: Validate Docker Compose File
+  ansible.builtin.command: docker-compose config --quiet
+  args:
+    chdir: "{{ pihole_docker_path }}"
+  changed_when: false
+
+- name: Startup Container
+  ansible.builtin.command: >-
+    docker-compose --ansi never --progress plain up --detach
+  args:
+    chdir: "{{ pihole_docker_path }}"
+  register: pihole_container_startup
+  changed_when: "'Started' in pihole_container_startup.stdout"
+
+- name: Create Pi-hole backup cronjob
+  ansible.builtin.cron:
+    name: "backup pi-hole"
+    minute: 0
+    hour: 2
+    job: "docker exec -t pihole bash -c 'cd /backups && pihole -a -t'"
+
+- name: Create Pi-hole backup cleanup cronjob
+  ansible.builtin.cron:
+    name: "cleanup backups pi-hole"
+    minute: 15
+    hour: 2
+    job: "find {{ pihole_docker_path }}/backups -name '*.tar.gz' -type f -mtime +30 -delete"

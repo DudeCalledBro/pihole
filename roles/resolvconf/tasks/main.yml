@@ -1,0 +1,19 @@
+- name: Install resolvconf requirements
+  ansible.builtin.apt:
+    name: resolvconf
+    state: present
+
+- name: Ensure resolvconf exists
+  ansible.builtin.file:
+    path: /etc/resolvconf.conf
+    owner: root
+    group: root
+    state: touch
+    mode: 0644
+
+- name: Update resolvconf to use local name server
+  ansible.builtin.lineinfile:
+    line: "name_servers=127.0.0.1"
+    dest: /etc/resolvconf.conf
+    regexp: "^#?name_servers="
+  notify: regenerate resolvconf
