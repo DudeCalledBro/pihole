@@ -1,11 +1,4 @@
 all:
   hosts:
     pihole.local:
-      # [DockerHub](https://hub.docker.com/r/pihole/pihole)
-      pihole_docker_image: "pihole/pihole:latest"
-
-  vars:
-    # Pi-hole Docker Environment
-    pihole_docker_environment: |
-      TZ="Europe/Berlin"
-      WEBPASSWORD="<some_password>"
+      ansible_user: pi

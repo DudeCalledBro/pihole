@@ -1,0 +1,12 @@
+pihole_exporter_docker_path: /opt/pihole-exporter
+pihole_exporter_docker_file_owner: root
+pihole_exporter_docker_file_group: root
+
+# pi-hole exporter docker image
+pihole_exporter_docker_image: "ekofr/pihole-exporter:latest"
+
+# pi-hole exporter docker configuration
+pihole_exporter_docker_port: 9617
+pihole_exporter_docker_environment:
+- "PIHOLE_HOSTNAME=192.168.1.2"
+- "PIHOLE_PASSWORD=mypassword"

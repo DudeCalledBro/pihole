@@ -1,0 +1,15 @@
+# Pi-hole Variables
+pihole_docker_environment:
+  - "TZ=Europe/Berlin"
+  - "WEBPASSWORD=<some_password>"
+
+# [DockerHub](https://hub.docker.com/r/pihole/pihole)
+pihole_docker_image: "pihole/pihole:latest"
+
+# Pi-hole Exporter Variables
+pihole_exporter_docker_environment:
+  - "PIHOLE_HOSTNAME=192.168.1.2"
+  - "PIHOLE_PASSWORD=<some_password>"
+
+# [DockerHub](https://hub.docker.com/r/ekofr/pihole-exporter)
+pihole_exporter_docker_image: "ekofr/pihole-exporter:latest"

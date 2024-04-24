@@ -11,7 +11,7 @@ This repository contains my ansible deployment for Pi-hole. I am using Pi-hole o
 
 ## Installation
 
-1. Copy the `example.inventory.yml` file to `inventory.yml` and setup as you need. Ensure you also check the role's defaults.
+1. Copy the `example.inventory.yml` file to `inventory.yml`. You also have to setup a variables file for your configuration. Therefore you have to copy `example.config.yml` to `config.yml`. Also have a look into the roles default's.
 
 2. Run the Ansible playbook to deploy Pi-hole
 
@@ -25,6 +25,21 @@ This repository contains my ansible deployment for Pi-hole. I am using Pi-hole o
 
     ```bash
     ansible-playbook play-resolvconf.yml
+    ```
+
+4. (**Optional**) Run the Ansible Pi-hole exporter playbook to setup a metrics exporter for Prometheus. That's an awsome project! [Check it out!](https://github.com/eko/pihole-exporter)
+
+    ```bash
+    ansible-playbook play-pihole_exporter.yml
+    ```
+
+    You can configure the Prometheus scrape configuration like to following:
+
+    ```yaml
+    scrape_configs:
+      - job_name: 'pihole'
+        static_configs:
+          - targets: ['localhost:9617']
     ```
 
 ## Backup and Restore

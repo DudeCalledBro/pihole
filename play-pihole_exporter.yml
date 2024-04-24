@@ -1,0 +1,12 @@
+- hosts: all
+  pre_tasks:
+  - name: Include Variables
+    ansible.builtin.include_vars: config.yml
+
+  roles:
+  - role: pihole_exporter
+
+  post_tasks:
+  - name: Ensure Pi-hole Exporter is reachable
+    ansible.builtin.wait_for:
+      port: "{{ pihole_exporter_docker_port | default(9617) }}"

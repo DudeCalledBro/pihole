@@ -1,0 +1,7 @@
+- name: Restart Container
+  ansible.builtin.command: >-
+    docker compose --ansi never --progress plain restart
+  args:
+    chdir: "{{ pihole_exporter_docker_path }}"
+  changed_when: true
+  listen: restart pihole exporter

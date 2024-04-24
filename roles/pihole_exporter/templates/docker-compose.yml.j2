@@ -1,0 +1,20 @@
+# {{ ansible_managed }}
+---
+version: "3"
+
+services:
+  pihole-exporter:
+    image: "{{ pihole_exporter_docker_image }}"
+    container_name: pihole-exporter
+    restart: unless-stopped
+    env_file:
+      - path: "{{ pihole_exporter_docker_path }}/pihole_exporter.env"
+        required: false
+    environment:
+      - "PORT={{ pihole_exporter_docker_port }}"
+      {%- for item in pihole_exporter_docker_environment %}
+      - "{{ item }}"
+      {%- endfor %}
+    ports:
+      - "{{ pihole_exporter_docker_port }}:{{ pihole_exporter_docker_port }}/tcp"
+      - "{{ pihole_exporter_docker_port }}:{{ pihole_exporter_docker_port }}/udp"

@@ -1,0 +1,31 @@
+- name: Create Pi-hole Exporter Directory
+  ansible.builtin.file:
+    path: "{{ pihole_exporter_docker_path }}"
+    owner: "{{ pihole_exporter_docker_file_owner }}"
+    group: "{{ pihole_exporter_docker_file_group }}"
+    state: directory
+    mode: 0755
+
+- name: Create Pi-hole Exporter Docker Compose File
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ pihole_exporter_docker_path }}/docker-compose.yml"
+    owner: "{{ pihole_exporter_docker_file_owner }}"
+    group: "{{ pihole_exporter_docker_file_group }}"
+    trim_blocks: false
+    mode: 0644
+  notify: restart pihole exporter
+
+- name: Validate Docker Compose File
+  ansible.builtin.command: docker-compose config --quiet
+  args:
+    chdir: "{{ pihole_exporter_docker_path }}"
+  changed_when: false
+
+- name: Startup Container
+  ansible.builtin.command: >-
+    docker-compose --ansi never --progress plain up --detach
+  args:
+    chdir: "{{ pihole_exporter_docker_path }}"
+  register: pihole_exporter_container_startup
+  changed_when: "'Started' in pihole_exporter_container_startup.stdout"
