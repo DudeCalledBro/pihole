@@ -4,7 +4,7 @@
     ansible.builtin.include_vars: config.yml
 
   roles:
-  - role: pihole_exporter
+  - role: pihole-exporter
 
   post_tasks:
   - name: Ensure Pi-hole Exporter is reachable
