@@ -6,18 +6,6 @@
     state: directory
     mode: 0755
 
-- name: Create Pi-hole Environment File
-  when:
-  - pihole_docker_environment is defined
-  - pihole_docker_environment | length
-  ansible.builtin.copy:
-    dest: "{{ pihole_docker_path }}/pihole.env"
-    content: "{{ pihole_docker_environment }}"
-    owner: "{{ pihole_docker_file_owner }}"
-    group: "{{ pihole_docker_file_group }}"
-    mode: 0644
-  notify: restart pihole
-
 - name: Create Pi-hole Docker Compose File
   ansible.builtin.template:
     src: docker-compose.yml.j2

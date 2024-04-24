@@ -8,6 +8,12 @@ services:
     hostname: "{{ pihole_docker_hostname }}"
     container_name: pihole
     restart: unless-stopped
+    {%- if pihole_docker_environment and pihole_docker_environment | length %}
+    environment:
+      {%- for item in pihole_docker_environment %}
+      - "{{ item }}"
+      {%- endfor %}
+    {%- endif %}
     env_file:
       - path: "{{ pihole_docker_path }}/pihole.env"
         required: false

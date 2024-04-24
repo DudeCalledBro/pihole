@@ -6,7 +6,7 @@ pihole_docker_file_group: root
 pihole_docker_image: "pihole/pihole:latest"
 
 # pi-hole docker environment
-pihole_docker_environment: ""
+pihole_docker_environment: []
 
 # pi-hole docker hostname
 pihole_docker_hostname: pihole
