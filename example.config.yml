@@ -16,6 +16,6 @@ pihole_exporter_docker_image: "ekofr/pihole-exporter:latest"
 
 # pi-hole local dns records
 pihole_docker_dns_records:
-- name: pihole.local
-  ip: 192.168.1.2
-  cname: dns.local
+  - name: pihole.local
+    ip: 192.168.1.2
+    cname: dns.local
