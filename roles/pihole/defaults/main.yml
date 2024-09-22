@@ -11,8 +11,5 @@ pihole_docker_environment: []
 # pi-hole docker hostname
 pihole_docker_hostname: pihole
 
-# pi-hole docker dns records
+# pi-hole local dns records
 pihole_docker_dns_records: []
-# - name: pihole.local
-#   ip: 192.168.1.2
-#   cname: dns.local
