@@ -1,4 +1,4 @@
-- name: Create Pi-hole Directory
+- name: Create pi-hole directory
   ansible.builtin.file:
     path: "{{ pihole_docker_path }}"
     owner: "{{ pihole_docker_file_owner }}"
@@ -6,7 +6,7 @@
     state: directory
     mode: 0755
 
-- name: Create Pi-hole Docker Compose File
+- name: Create pi-hole docker compose file
   ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "{{ pihole_docker_path }}/docker-compose.yml"
@@ -16,28 +16,53 @@
     mode: 0644
   notify: restart pihole
 
-- name: Validate Docker Compose File
-  ansible.builtin.command: docker-compose config --quiet
+- name: Validate docker compose file
+  ansible.builtin.command: docker compose config --quiet
   args:
     chdir: "{{ pihole_docker_path }}"
   changed_when: false
 
-- name: Startup Container
+- name: Startup container
   ansible.builtin.command: >-
-    docker-compose --ansi never --progress plain up --detach
+    docker compose --ansi never --progress plain up --detach
   args:
     chdir: "{{ pihole_docker_path }}"
   register: pihole_container_startup
   changed_when: "'Started' in pihole_container_startup.stdout"
 
-- name: Create Pi-hole backup cronjob
+- name: Manage local dns records
+  ansible.builtin.lineinfile:
+    path: "{{ pihole_docker_path }}/etc-pihole/custom.list"
+    regexp: "^(.*) {{ item.name }}"
+    line: "{{ item.ip }} {{ item.name }}"
+    state: "{{ item.state | default(omit) }}"
+    create: true
+  loop: "{{ pihole_docker_dns_records }}"
+  loop_control:
+    label: "{{ item.name }}"
+  notify: restart pihole
+
+- name: Manage local cname records
+  when: item.cname is defined and item.cname | length
+  ansible.builtin.lineinfile:
+    path: "{{ pihole_docker_path }}/etc-dnsmasq.d/05-pihole-custom-cname.conf"
+    regexp: "^cname=(.*),{{ item.name }}"
+    line: "cname={{ item.cname }},{{ item.name }}"
+    state: "{{ item.state | default(omit) }}"
+    create: true
+  loop: "{{ pihole_docker_dns_records }}"
+  loop_control:
+    label: "{{ item.cname | default(item.name) }}"
+  notify: restart pihole
+
+- name: Create pi-hole backup cronjob
   ansible.builtin.cron:
     name: "backup pi-hole"
     minute: 0
     hour: 2
     job: "docker exec -t pihole bash -c 'cd /backups && pihole -a -t'"
 
-- name: Create Pi-hole backup cleanup cronjob
+- name: Create pi-hole backup cleanup cronjob
   ansible.builtin.cron:
     name: "cleanup backups pi-hole"
     minute: 15

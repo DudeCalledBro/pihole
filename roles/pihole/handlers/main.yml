@@ -1,4 +1,4 @@
-- name: Restart Container
+- name: Restart container
   ansible.builtin.command: >-
     docker compose --ansi never --progress plain restart
   args:
