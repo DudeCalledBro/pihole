@@ -5,6 +5,7 @@
 
   roles:
   - role: pihole
+  - role: nginx
 
   post_tasks:
   - name: Ensure Pi-hole http is reachable (port 80)

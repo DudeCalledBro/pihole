@@ -1,0 +1,6 @@
+nginx_docker_path: /opt/nginx
+nginx_docker_file_owner: root
+nginx_docker_file_group: root
+
+# nginx docker image
+nginx_docker_image: "nginx:alpine"

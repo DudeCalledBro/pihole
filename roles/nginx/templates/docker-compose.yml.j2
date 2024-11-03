@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+---
+services:
+  nginx:
+    image: "{{ nginx_docker_image }}"
+    container_name: pihole-proxy
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "{{ nginx_docker_path }}/default.conf:/etc/nginx/conf.d/default.conf:ro"

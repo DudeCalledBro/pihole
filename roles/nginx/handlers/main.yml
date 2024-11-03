@@ -1,0 +1,7 @@
+- name: Restart nginx container
+  ansible.builtin.command: >-
+    docker compose --ansi never --progress plain restart
+  args:
+    chdir: "{{ nginx_docker_path }}"
+  changed_when: true
+  listen: restart nginx
