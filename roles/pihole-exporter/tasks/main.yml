@@ -17,14 +17,14 @@
   notify: restart pihole exporter
 
 - name: Validate Docker Compose File
-  ansible.builtin.command: docker-compose config --quiet
+  ansible.builtin.command: docker compose config --quiet
   args:
     chdir: "{{ pihole_exporter_docker_path }}"
   changed_when: false
 
 - name: Startup Container
   ansible.builtin.command: >-
-    docker-compose --ansi never --progress plain up --detach
+    docker compose --ansi never --progress plain up --detach
   args:
     chdir: "{{ pihole_exporter_docker_path }}"
   register: pihole_exporter_container_startup
